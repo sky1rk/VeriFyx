@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>Attendance | VERIFYX</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="index.html"><img src="assets/verifyx-logo.png" alt="VERIFYX V logo"><span>VERIFYX</span></a>
+    <div class="side-label">Workspace</div>
+    <nav class="side-nav">
+      <a href="user-dashboard.html"><span class="ico">⌂</span><span class="nav-text">Overview</span></a>
+      <a href="face-enrollment.html"><span class="ico">◎</span><span class="nav-text">Face Enrollment</span></a>
+      <a class="active" href="attendance.html"><span class="ico">◷</span><span class="nav-text">Attendance</span></a>
+      <a href="examination-verification.html"><span class="ico">▣</span><span class="nav-text">Examination Verification</span></a>
+      <a href="attendance-history.html"><span class="ico">≋</span><span class="nav-text">Attendance History</span></a>
+      <a href="my-profile.html"><span class="ico">♙</span><span class="nav-text">My Profile</span></a>
+      <a href="settings.html"><span class="ico">⚙</span><span class="nav-text">Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><nav class="side-nav"><a href="#" data-logout><span class="ico">↪</span><span class="nav-text">Log out</span></a></nav></div>
+  </aside>
+
+  <main class="app-main">
+    <header class="app-top">
+      <div class="crumb">VERIFYX <span class="muted">/ ATTENDANCE</span></div>
+      <div class="user-chip"><span class="status ok">LBPH Backend</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
+    </header>
+
+    <div class="app-content">
+      <div class="page-title">
+        <div>
+          <div class="eyebrow">ATTENDANCE / FACE SCAN</div>
+          <h1>Record Attendance.</h1>
+          <p>Capture a frame and verify identity with the LBPH backend. Each attempt is processed by the trained model and recorded.</p>
+        </div>
+      </div>
+
+      <div class="notice">
+        Verification uses the local LBPH recognizer trained on <b>enrolled faces</b>. The recognized name is logged to attendance history. Lower distance means a closer match; results are accepted only when within the threshold. Enroll people first on the Face Enrollment page.
+      </div>
+
+      <div class="content-grid">
+        <section class="panel">
+          <div class="panel-head"><h3>Camera Verification</h3><span class="status ok" id="cameraLive">● READY</span></div>
+          <div class="camera-wrap">
+            <div class="camera-frame">
+              <div class="camera-overlay"><div class="face-guide"></div><span class="camera-badge hidden" id="cameraLive">LIVE</span></div>
+              <div class="camera-placeholder" id="cameraPlaceholder">
+                <div style="font-size:40px;opacity:.5">◷</div>
+                <p>Camera preview will appear here.</p>
+                <p class="muted" style="font-size:12px">Allow camera access when prompted.</p>
+              </div>
+              <video id="cameraVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;display:block"></video>
+            </div>
+            <p class="muted">Make sure your face is visible in the frame, then click Record Attendance to capture and verify with the LBPH backend.</p>
+            <div class="controls">
+              <button class="btn btn-ghost" id="startCamera">Start Camera</button>
+              <button class="btn btn-primary" id="recordAttendance">Record Attendance</button>
+              <button class="btn btn-ghost" id="stopCamera">Stop Camera</button>
+            </div>
+            <div class="camera-status" id="cameraStatus">Camera ready. Start the camera when you are prepared.</div>
+          </div>
+        </section>
+
+        <aside class="panel">
+          <div class="panel-head"><h3>Session Details</h3></div>
+          <div class="form-grid">
+            <div class="field"><label for="attendanceCourse">Course / Subject</label><input id="attendanceCourse" type="text" placeholder="e.g. CS 401"></div>
+            <div class="field"><label for="attendanceType">Attendance Type</label>
+              <select id="attendanceType"><option>Regular Class</option><option>Laboratory Session</option><option>Examination</option><option>Seminar</option></select>
+            </div>
+            <div class="field"><label for="attendanceDate">Date</label><input id="attendanceDate" type="date"></div>
+            <div class="field"><label for="attendanceTime">Time</label><input id="attendanceTime" type="time"></div>
+          </div>
+
+          <div class="panel-head" style="margin-top:16px"><h3>Verification Result</h3></div>
+          <div class="result" id="verificationResult">
+            <h4>ATTENDANCE STATUS</h4>
+            <p>No attendance verification has been performed. Start the camera and click "Record Attendance" to run LBPH recognition.</p>
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/api.js"></script>
+<script src="js/camera.js"></script>
+<script src="js/verification.js"></script>
+</body>
+</html>

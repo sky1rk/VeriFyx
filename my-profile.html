@@ -1,0 +1,55 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#050505"><title>My Profile | VERIFYX</title><link rel="stylesheet" href="css/style.css"></head><body><div class="app-shell"><aside class="sidebar"><a class="brand" href="index.html"><img src="assets/verifyx-logo.png" alt="VERIFYX V logo"><span>VERIFYX</span></a><div class="side-label">Workspace</div><nav class="side-nav"><a class="" href="user-dashboard.html"><span class="ico">⌂</span><span class="nav-text">Overview</span></a><a class="" href="face-enrollment.html"><span class="ico">◎</span><span class="nav-text">Face Enrollment</span></a><a class="" href="attendance.html"><span class="ico">◷</span><span class="nav-text">Attendance</span></a><a class="" href="examination-verification.html"><span class="ico">▣</span><span class="nav-text">Examination Verification</span></a><a class="" href="attendance-history.html"><span class="ico">≋</span><span class="nav-text">Attendance History</span></a><a class="active" href="my-profile.html" aria-current="page"><span class="ico">♙</span><span class="nav-text">My Profile</span></a><a class="" href="settings.html"><span class="ico">⚙</span><span class="nav-text">Settings</span></a></nav><div class="sidebar-bottom"><nav class="side-nav"><a href="#" data-logout><span class="ico">↪</span><span class="nav-text">Log out</span></a></nav></div></aside><main class="app-main"><header class="app-top"><div class="crumb">VERIFYX <span class="muted">/ WORKSPACE</span></div><div class="user-chip"><span class="status ok">Prototype</span><div class="avatar">VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div></header><div class="app-content"><div class="page-title"><div><div class="eyebrow">ACCOUNT / PROFILE</div><h1>My profile.</h1><p>Manage your personal information and account identity.</p></div><span class="status ok" id="headStatus">Active</span></div>
+<section class="panel" aria-labelledby="identityTitle" style="margin-bottom:15px">
+<h3 class="sr-only" id="identityTitle">Profile summary</h3>
+<div class="profile-card">
+<div class="profile-photo">
+<div class="avatar avatar-xl" id="profileAvatar" data-avatar-manual></div>
+<div class="photo-actions">
+<button class="btn btn-primary btn-small" id="uploadBtn" type="button">Upload Photo</button>
+<button class="btn btn-danger btn-small" id="removeBtn" type="button" data-modal="removePhotoModal">Remove Photo</button>
+</div>
+<input class="sr-only" id="photoInput" type="file" accept="image/jpeg,image/png,image/webp,.jpg,.jpeg,.png,.webp" aria-label="Choose profile photo" tabindex="-1">
+<div class="muted" style="font-size:10px;text-align:center;max-width:220px">JPG, JPEG, PNG or WEBP, up to 5 MB.</div>
+<div class="form-error" id="photoMsg" role="alert"></div>
+</div>
+<div class="profile-meta">
+<div class="eyebrow">PROFILE</div>
+<h2 id="pfName">-</h2>
+<dl class="meta-grid">
+<div><dt id="pfIdLabel">Student ID</dt><dd id="pfId">-</dd></div>
+<div><dt>Account type</dt><dd id="pfType">-</dd></div>
+<div><dt>Email address</dt><dd id="pfEmail">-</dd></div>
+<div><dt>Account status</dt><dd><span class="status ok" id="pfStatus">Active</span></dd></div>
+</dl>
+</div>
+</div>
+</section>
+<div class="content-grid">
+<section class="panel" aria-labelledby="formTitle">
+<div class="panel-head"><h3 id="formTitle">Personal information</h3><button class="btn btn-ghost btn-small" id="editBtn" type="button">Edit Profile</button></div>
+<form id="profileForm" novalidate>
+<div class="form-grid">
+<div class="field"><label for="firstName">First name</label><input id="firstName" name="firstName" autocomplete="given-name" maxlength="50" disabled><div class="err" id="err-firstName"></div></div>
+<div class="field"><label for="middleName">Middle name</label><input id="middleName" name="middleName" autocomplete="additional-name" maxlength="50" disabled><div class="err" id="err-middleName"></div></div>
+<div class="field"><label for="lastName">Last name</label><input id="lastName" name="lastName" autocomplete="family-name" maxlength="50" disabled><div class="err" id="err-lastName"></div></div>
+<div class="field"><label for="studentId" id="studentIdLabel">Student ID</label><input id="studentId" name="studentId" maxlength="20" disabled><div class="err" id="err-studentId"></div></div>
+<div class="field span2"><label for="email">Email address</label><input id="email" name="email" type="email" autocomplete="email" disabled><div class="err" id="err-email"></div></div>
+<div class="field"><label for="contact">Contact number</label><input id="contact" name="contact" type="tel" autocomplete="tel" placeholder="0917 123 4567" disabled><div class="err" id="err-contact"></div></div>
+<div class="field span2"><label for="college">College / Department</label><input id="college" name="college" maxlength="80" disabled><div class="err" id="err-college"></div></div>
+<div class="field span2"><label for="program" id="programLabel">Program</label><input id="program" name="program" maxlength="80" disabled><div class="err" id="err-program"></div></div>
+<div class="field" id="yearField"><label for="yearLevel">Year level</label><select id="yearLevel" name="yearLevel" disabled><option value="">Not specified</option><option>1st Year</option><option>2nd Year</option><option>3rd Year</option><option>4th Year</option><option>5th Year</option></select><div class="err" id="err-yearLevel"></div></div>
+</div>
+<div class="form-actions hidden" id="formActions"><button class="btn btn-ghost" id="cancelBtn" type="button">Cancel</button><button class="btn btn-primary" id="saveBtn" type="submit">Save Changes</button></div>
+</form>
+</section>
+<aside class="panel" aria-labelledby="acctTitle">
+<div class="panel-head"><h3 id="acctTitle">Account information</h3><small>Managed by the system</small></div>
+<dl class="info-list">
+<div><dt>Account type</dt><dd id="acType">-</dd></div>
+<div><dt>User ID</dt><dd id="acUserId">-</dd></div>
+<div><dt>Registration date</dt><dd id="acRegistered">-</dd></div>
+<div><dt>Account status</dt><dd><span class="status ok" id="acStatus">Active</span></dd></div>
+</dl>
+<div class="notice">System-generated identifiers and account status cannot be edited. Profile data is saved in this browser only for demonstration.</div>
+</aside>
+</div></div></main></div><div class="modal-backdrop" id="termsModal"><div class="modal"><div class="modal-head"><div><div class="eyebrow">VERIFYX · LEGAL</div><h2>Terms and Conditions</h2></div><button class="icon-btn" data-close-modal>✕</button></div><div class="modal-content"><p>These sample terms describe intended use of the VERIFYX prototype. They must be reviewed and approved by West Visayas State University and its Data Protection Officer before production deployment.</p><h4>1. Acceptance and purpose</h4><p>VERIFYX is intended to support attendance recording and examination identity verification for authorized university activities.</p><h4>2. Biometric information</h4><p>Facial images and biometric templates may constitute sensitive personal information. Any collection or processing must have a valid legal basis, clear notice, appropriate safeguards, and institutional approval.</p><h4>3. Verification and attendance</h4><p>Camera-based face detection alone does not establish identity. Automated results must be subject to a properly validated recognition process and appropriate human review.</p><h4>4. Examination verification</h4><p>Uncertain or unsuccessful matches must be referred for manual identity checking. A failed match alone must not be treated as proof of misconduct.</p><h4>5. Privacy and security</h4><p>Processing must comply with applicable Philippine laws, including the Data Privacy Act of 2012 (Republic Act No. 10173), its implementing rules, and relevant institutional policies.</p><h4>6. Authorized use and responsibilities</h4><p>Users must protect their credentials and use the system only for authorized university purposes. Administrators must follow role-based access and data-handling policies.</p><h4>7. Retention and account management</h4><p>Retention, access, correction, deletion, and account-closure procedures must be defined by the university before production use.</p></div><div class="modal-actions"><button class="btn btn-ghost" data-close-modal>Close</button><button class="btn btn-primary" data-close-modal>I Understand</button></div></div></div><div class="modal-backdrop" id="privacyModal"><div class="modal"><div class="modal-head"><div><div class="eyebrow">VERIFYX · PRIVACY</div><h2>Privacy Notice</h2></div><button class="icon-btn" data-close-modal>✕</button></div><div class="modal-content"><p>This prototype uses browser camera access only after the user selects Start Camera. The current demo does not transmit camera frames to a VERIFYX server, create biometric templates, or perform identity matching. Production use requires a university-approved privacy notice, lawful processing basis, security controls, retention policy, and contact details for the responsible office.</p></div><div class="modal-actions"><button class="btn btn-primary" data-close-modal>Close</button></div></div></div><div class="modal-backdrop" id="removePhotoModal"><div class="modal" role="dialog" aria-modal="true" aria-labelledby="rmTitle" style="width:min(440px,100%)"><div class="modal-head"><div><div class="eyebrow">PROFILE PHOTO</div><h2 id="rmTitle">Remove photo?</h2></div><button class="icon-btn" data-close-modal aria-label="Close">✕</button></div><div class="modal-content"><p>Your photo will be removed and your initials will be shown instead.</p></div><div class="modal-actions"><button class="btn btn-ghost" data-close-modal>Keep Photo</button><button class="btn btn-primary" id="confirmRemove" data-close-modal>Remove Photo</button></div></div></div><script src="js/main.js"></script><script src="js/dashboard.js"></script><script src="js/profile.js"></script><script src="js/my-profile.js"></script></body></html>

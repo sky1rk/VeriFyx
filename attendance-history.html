@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>Attendance History | VERIFYX</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="index.html"><img src="assets/verifyx-logo.png" alt="VERIFYX V logo"><span>VERIFYX</span></a>
+    <div class="side-label">Workspace</div>
+    <nav class="side-nav">
+      <a href="user-dashboard.html"><span class="ico">⌂</span><span class="nav-text">Overview</span></a>
+      <a href="face-enrollment.html"><span class="ico">◎</span><span class="nav-text">Face Enrollment</span></a>
+      <a href="attendance.html"><span class="ico">◷</span><span class="nav-text">Attendance</span></a>
+      <a href="examination-verification.html"><span class="ico">▣</span><span class="nav-text">Examination Verification</span></a>
+      <a class="active" href="attendance-history.html" aria-current="page"><span class="ico">≋</span><span class="nav-text">Attendance History</span></a>
+      <a href="my-profile.html"><span class="ico">♙</span><span class="nav-text">My Profile</span></a>
+      <a href="settings.html"><span class="ico">⚙</span><span class="nav-text">Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><nav class="side-nav"><a href="#" data-logout><span class="ico">↪</span><span class="nav-text">Log out</span></a></nav></div>
+  </aside>
+
+  <main class="app-main">
+    <header class="app-top">
+      <div class="crumb">VERIFYX <span class="muted">/ WORKSPACE</span></div>
+      <div class="user-chip"><span class="status ok">LBPH Backend</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
+    </header>
+
+    <div class="app-content">
+      <div class="page-title">
+        <div>
+          <div class="eyebrow">RECORDS / HISTORY</div>
+          <h1>Recognition & Attendance History.</h1>
+          <p>View attendance and verification attempts recorded by the LBPH backend.</p>
+        </div>
+        <button class="btn btn-ghost btn-small" id="refreshRecords" type="button">Refresh</button>
+      </div>
+
+      <div class="stats" aria-label="Records summary">
+        <div class="stat-card"><div class="label">TOTAL RECORDS</div><div class="value" id="sumTotal">0</div><div class="sub">All recorded attempts</div></div>
+        <div class="stat-card"><div class="label">VERIFIED</div><div class="value" id="sumPresent">0</div><div class="sub"><span class="status ok">Accepted match</span></div></div>
+        <div class="stat-card"><div class="label">NO FACE</div><div class="value" id="sumLate">0</div><div class="sub"><span class="status warn">Detection failed</span></div></div>
+        <div class="stat-card"><div class="label">REJECTED</div><div class="value" id="sumAbsent">0</div><div class="sub"><span class="status bad">Not matched</span></div></div>
+      </div>
+
+      <section class="panel" aria-labelledby="recordsTitle">
+        <div class="panel-head"><h3 id="recordsTitle">Recognition records</h3><button class="btn btn-ghost btn-small" id="exportCsv" type="button">Export CSV</button></div>
+        <div class="table-toolbar" role="search">
+          <div class="grow"><label for="searchInput">Search</label><input id="searchInput" type="search" placeholder="Search by date, type, status, or identity" autocomplete="off"></div>
+          <div class="ctl"><label for="statusFilter">Status</label>
+            <select id="statusFilter">
+              <option value="">All statuses</option>
+              <option>Verified</option>
+              <option>Rejected</option>
+              <option>No Face Detected</option>
+              <option>Pending Verification</option>
+            </select>
+          </div>
+          <div class="ctl"><label for="dateFrom">From</label><input id="dateFrom" type="date"></div>
+          <div class="ctl"><label for="dateTo">To</label><input id="dateTo" type="date"></div>
+          <div class="ctl"><label for="sortOrder">Sort by date</label><select id="sortOrder"><option value="desc">Newest first</option><option value="asc">Oldest first</option></select></div>
+          <div><button class="btn btn-ghost btn-small" id="resetFilters" type="button">Reset</button></div>
+        </div>
+        <div class="form-error" id="rangeError" role="alert"></div>
+        <div class="table-wrap" id="tableWrap">
+          <table aria-describedby="recordsTitle">
+            <thead>
+              <tr>
+                <th scope="col" aria-sort="descending" id="dateTh"><button class="sort-btn" id="sortBtn" type="button" aria-label="Sort by date">Date <span id="sortArrow" aria-hidden="true">↓</span></button></th>
+                <th scope="col">Day</th>
+                <th scope="col">Time</th>
+                <th scope="col">Predicted Identity</th>
+                <th scope="col">Event Type</th>
+                <th scope="col">Status</th>
+                <th scope="col">Verification Method</th>
+              </tr>
+            </thead>
+            <tbody id="recordsBody"></tbody>
+          </table>
+        </div>
+        <div class="empty-state hidden" id="emptyState">
+          <div class="empty-ico" aria-hidden="true">≋</div>
+          <h4 id="emptyTitle">No recognition records yet</h4>
+          <p id="emptyText">Attendance and verification attempts recorded by the backend will appear here.</p>
+          <button class="btn btn-ghost btn-small hidden" id="emptyReset" type="button">Clear filters</button>
+        </div>
+        <div class="pager" id="pager"><span id="pagerInfo" aria-live="polite"></span><div class="pages" id="pagerPages"></div></div>
+        <div class="notice">Records shown here are loaded from the local VERIFYX backend and reflect actual LBPH recognition attempts made through this system.</div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/api.js"></script>
+<script src="js/attendance-history.js"></script>
+</body>
+</html>

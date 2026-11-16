@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>Face Enrollment | VERIFYX</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="index.html"><img src="assets/verifyx-logo.png" alt="VERIFYX V logo"><span>VERIFYX</span></a>
+    <div class="side-label">Workspace</div>
+    <nav class="side-nav">
+      <a href="user-dashboard.html"><span class="ico">⌂</span><span class="nav-text">Overview</span></a>
+      <a class="active" href="face-enrollment.html"><span class="ico">◎</span><span class="nav-text">Face Enrollment</span></a>
+      <a href="attendance.html"><span class="ico">◷</span><span class="nav-text">Attendance</span></a>
+      <a href="examination-verification.html"><span class="ico">▣</span><span class="nav-text">Examination Verification</span></a>
+      <a href="attendance-history.html"><span class="ico">≋</span><span class="nav-text">Attendance History</span></a>
+      <a href="my-profile.html"><span class="ico">♙</span><span class="nav-text">My Profile</span></a>
+      <a href="settings.html"><span class="ico">⚙</span><span class="nav-text">Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><nav class="side-nav"><a href="#" data-logout><span class="ico">↪</span><span class="nav-text">Log out</span></a></nav></div>
+  </aside>
+
+  <main class="app-main">
+    <header class="app-top">
+      <div class="crumb">VERIFYX <span class="muted">/ FACE ENROLLMENT</span></div>
+      <div class="user-chip"><span class="status ok">LBPH Backend</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
+    </header>
+
+    <div class="app-content">
+      <div class="page-title">
+        <div>
+          <div class="eyebrow">BIOMETRIC / ENROLLMENT</div>
+          <h1>Face Enrollment.</h1>
+          <p>Enroll a new person by assigning a name, then capture one or more face samples. Samples are saved and the local LBPH recognizer is trained so the person can be recognized during attendance and examination verification.</p>
+        </div>
+        <span class="status pending" id="enrollmentStatusBadge">No enrollments</span>
+      </div>
+
+      <div class="notice">
+        <b>Dynamic enrollment:</b> Enter the person's name, start the camera, and click "Capture &amp; Enroll". You can capture multiple samples per person (different angles/lighting) to improve recognition. Enrolled identities are stored locally in <code>backend/data/</code> and used for attendance logging.
+      </div>
+
+      <div class="content-grid">
+        <section class="panel">
+          <div class="panel-head"><h3>Enroll New Face</h3><span class="status ok" id="cameraLive">● READY</span></div>
+
+          <div class="form-grid" style="margin-bottom:12px">
+            <div class="field">
+              <label for="enrollName">Full Name <span class="muted">(required)</span></label>
+              <input id="enrollName" type="text" placeholder="e.g. Juan Dela Cruz" autocomplete="off">
+            </div>
+            <div class="field">
+              <label for="enrollPersonId">Person / Student ID <span class="muted">(optional)</span></label>
+              <input id="enrollPersonId" type="text" placeholder="e.g. 2024-001 (auto if blank)">
+            </div>
+          </div>
+
+          <div class="camera-wrap">
+            <div class="camera-frame">
+              <div class="camera-overlay"><div class="face-guide"></div><span class="camera-badge hidden" id="cameraLive">LIVE</span></div>
+              <div class="camera-placeholder" id="cameraPlaceholder">
+                <div style="font-size:40px;opacity:.5">◎</div>
+                <p>Camera preview will appear here.</p>
+                <p class="muted" style="font-size:12px">Allow camera access when prompted by your browser.</p>
+              </div>
+              <video id="cameraVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;display:block"></video>
+            </div>
+            <p class="muted">Center the face, ensure good lighting, then capture. Each capture saves a sample and retrains the LBPH model for this person.</p>
+            <div class="controls">
+              <button class="btn btn-ghost" id="startEnroll">Open Camera</button>
+              <button class="btn btn-ghost" id="startCamera">Start Camera</button>
+              <button class="btn btn-primary" id="captureFace">Capture &amp; Enroll</button>
+              <button class="btn btn-ghost" id="stopCamera">Stop Camera</button>
+            </div>
+            <div class="camera-status" id="cameraStatus">Enter a name, start the camera, and capture to enroll.</div>
+          </div>
+        </section>
+
+        <aside class="panel">
+          <div class="panel-head"><h3>Enrollment Result</h3></div>
+          <div class="result" id="verificationResult">
+            <h4>ENROLLMENT STATUS</h4>
+            <p>No face sample captured yet. Enter a name, start the camera, and click "Capture &amp; Enroll".</p>
+          </div>
+
+          <div class="panel" style="margin-top:16px">
+            <div class="panel-head"><h3>Enrolled People</h3><span class="status ok" id="enrolledCountStat">0</span></div>
+            <p class="muted" id="enrollmentStatusDetail">No enrolled faces yet. Enter a name and capture samples to register someone for attendance.</p>
+            <div id="enrolledPeopleList"><p class="muted">No people enrolled yet.</p></div>
+            <table class="info-table" style="margin-top:12px">
+              <tr><td><b>Status</b></td><td id="enrollmentStatusStat">Not enrolled</td></tr>
+              <tr><td><b>Latest</b></td><td id="enrollmentMatchStat">-</td></tr>
+              <tr><td><b>Last Updated</b></td><td id="enrollmentDateStat">-</td></tr>
+            </table>
+          </div>
+
+          <div class="notice" style="margin-top:16px">
+            <b>How it works:</b> Haar cascade detects a face, crops/preprocesses it (grayscale, 62×47), saves the sample for the named person, and trains an OpenCV LBPH recognizer over all enrolled samples. Attendance/exam verification matches against these enrolled identities.
+          </div>
+        </aside>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/dashboard.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/api.js"></script>
+<script src="js/camera.js"></script>
+<script src="js/verification.js"></script>
+</body>
+</html>

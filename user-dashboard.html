@@ -1,0 +1,104 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <title>User Dashboard | VERIFYX</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <a class="brand" href="index.html"><img src="assets/verifyx-logo.png" alt="VERIFYX V logo"><span>VERIFYX</span></a>
+    <div class="side-label">Workspace</div>
+    <nav class="side-nav">
+      <a class="active" href="user-dashboard.html" aria-current="page"><span class="ico">⌂</span><span class="nav-text">Overview</span></a>
+      <a href="face-enrollment.html"><span class="ico">◎</span><span class="nav-text">Face Enrollment</span></a>
+      <a href="attendance.html"><span class="ico">◷</span><span class="nav-text">Attendance</span></a>
+      <a href="examination-verification.html"><span class="ico">▣</span><span class="nav-text">Examination Verification</span></a>
+      <a href="attendance-history.html"><span class="ico">≋</span><span class="nav-text">Attendance History</span></a>
+      <a href="my-profile.html"><span class="ico">♙</span><span class="nav-text">My Profile</span></a>
+      <a href="settings.html"><span class="ico">⚙</span><span class="nav-text">Settings</span></a>
+    </nav>
+    <div class="sidebar-bottom"><nav class="side-nav"><a href="#" data-logout><span class="ico">↪</span><span class="nav-text">Log out</span></a></nav></div>
+  </aside>
+
+  <main class="app-main">
+    <header class="app-top">
+      <div class="crumb">VERIFYX <span class="muted">/ WORKSPACE</span></div>
+      <div class="user-chip"><span class="status ok">LBPH Backend</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
+    </header>
+
+    <div class="app-content">
+      <div class="page-title">
+        <div>
+          <div class="eyebrow">USER WORKSPACE</div>
+          <h1>Overview.</h1>
+          <p>Monitor enrolled identities, recognition activity, and attendance records from the LBPH backend.</p>
+        </div>
+      </div>
+
+      <div class="stats" aria-label="Overview summary">
+        <div class="stat-card"><div class="label">ENROLLED PEOPLE</div><div class="value" id="statEnrollments" data-stat="enrollments">0</div><div class="sub">Registered faces</div></div>
+        <div class="stat-card"><div class="label">TOTAL RECORDS</div><div class="value" id="statTotalRecords" data-stat="total">0</div><div class="sub">All attempts</div></div>
+        <div class="stat-card"><div class="label">VERIFIED</div><div class="value" id="statVerified" data-stat="verified">0</div><div class="sub"><span class="status ok">Accepted matches</span></div></div>
+        <div class="stat-card"><div class="label">REJECTED / NO FACE</div><div class="value"><span id="statRejected">0</span> / <span id="statNoFace">0</span></div><div class="sub"><span class="status bad">Unmatched attempts</span></div></div>
+      </div>
+
+      <div class="content-grid">
+        <section class="panel">
+          <div class="panel-head"><h3>Quick Actions</h3></div>
+          <div class="controls" style="flex-wrap:wrap;gap:10px">
+            <a class="btn btn-primary" href="face-enrollment.html">Enroll New Face</a>
+            <a class="btn btn-ghost" href="attendance.html">Record Attendance</a>
+            <a class="btn btn-ghost" href="examination-verification.html">Verify Examination</a>
+            <a class="btn btn-ghost" href="attendance-history.html">View History</a>
+          </div>
+          <div class="notice" style="margin-top:14px">
+            <b>How it works:</b> Enroll a person by name on the Face Enrollment page (capture one or more samples). The backend trains a local LBPH recognizer from enrolled samples. Attendance and examination verification recognize enrolled identities and log results.
+          </div>
+        </section>
+
+        <aside class="panel">
+          <div class="panel-head"><h3>System Status</h3></div>
+          <table class="info-table">
+            <tr><td><b>Recognition</b></td><td>Local LBPH (dynamic enrollment)</td></tr>
+            <tr><td><b>Face Detection</b></td><td>Haar Cascade + preprocessing</td></tr>
+            <tr><td><b>Input Size</b></td><td>62 × 47 grayscale</td></tr>
+            <tr><td><b>Records</b></td><td>Stored in backend/data/attendance.json</td></tr>
+          </table>
+          <p class="muted" style="margin-top:10px;font-size:12px">Start the backend and use the camera pages to enroll and recognize faces. Stats refresh automatically when the backend is reachable.</p>
+        </aside>
+      </div>
+
+      <section class="panel" style="margin-top:16px">
+        <div class="panel-head"><h3>Recent Recognition Records</h3><a class="btn btn-ghost btn-small" href="attendance-history.html">View all</a></div>
+        <div class="table-wrap">
+          <table aria-label="Recent recognition records">
+            <thead>
+              <tr>
+                <th scope="col">Time</th>
+                <th scope="col">User</th>
+                <th scope="col">Event</th>
+                <th scope="col">Recognized</th>
+                <th scope="col">Distance</th>
+                <th scope="col">Status</th>
+              </tr>
+            </thead>
+            <tbody id="recentRecordsBody">
+              <tr><td colspan="6" class="muted">Loading records...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+</div>
+
+<script src="js/main.js"></script>
+<script src="js/profile.js"></script>
+<script src="js/api.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
