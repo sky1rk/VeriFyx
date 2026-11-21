@@ -27,7 +27,7 @@
   <main class="app-main">
     <header class="app-top">
       <div class="crumb">VERIFYX <span class="muted">/ FACE ENROLLMENT</span></div>
-      <div class="user-chip"><span class="status ok">LBPH Backend</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
+      <div class="user-chip"><span class="status ok">VGG Model</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
     </header>
 
     <div class="app-content">
@@ -35,13 +35,14 @@
         <div>
           <div class="eyebrow">BIOMETRIC / ENROLLMENT</div>
           <h1>Face Enrollment.</h1>
-          <p>Enroll a new person by assigning a name, then capture one or more face samples. Samples are saved and the local LBPH recognizer is trained so the person can be recognized during attendance and examination verification.</p>
+          <p>Enroll a new person by assigning a name, then capture one or more face samples. Samples are saved and the local VGG recognizer is trained so the person can be recognized during attendance and examination verification.</p>
         </div>
         <span class="status pending" id="enrollmentStatusBadge">No enrollments</span>
       </div>
 
       <div class="notice">
-        <b>Dynamic enrollment:</b> Enter the person's name, start the camera, and click "Capture &amp; Enroll". You can capture multiple samples per person (different angles/lighting) to improve recognition. Enrolled identities are stored locally in <code>backend/data/</code> and used for attendance logging.
+        <b>Face enrollment:</b> Start the camera and click "Capture &amp; Enroll". You can capture multiple samples (different angles/lighting) to improve your record. Samples are stored locally in <code>backend/data/</code> and are owned by your account.
+        <p id="enrollmentIdentityNote" class="muted" style="margin:6px 0 0">Administrators may enroll any identity; regular accounts can only enroll their own face.</p>
       </div>
 
       <div class="content-grid">
@@ -69,7 +70,7 @@
               </div>
               <video id="cameraVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;display:block"></video>
             </div>
-            <p class="muted">Center the face, ensure good lighting, then capture. Each capture saves a sample and retrains the LBPH model for this person.</p>
+            <p class="muted">Center the face, ensure good lighting, then capture. Each capture saves a sample and retrains the VGG model for this person.</p>
             <div class="controls">
               <button class="btn btn-ghost" id="startEnroll">Open Camera</button>
               <button class="btn btn-ghost" id="startCamera">Start Camera</button>
@@ -99,7 +100,7 @@
           </div>
 
           <div class="notice" style="margin-top:16px">
-            <b>How it works:</b> Haar cascade detects a face, crops/preprocesses it (grayscale, 62×47), saves the sample for the named person, and trains an OpenCV LBPH recognizer over all enrolled samples. Attendance/exam verification matches against these enrolled identities.
+            <b>How it works:</b> Haar cascade detects a face, crops/preprocesses it (grayscale, 62×47), saves the sample for the named person, and trains an OpenCV VGG recognizer over all enrolled samples. Attendance/exam verification matches against these enrolled identities.
           </div>
         </aside>
       </div>

@@ -1,6 +1,6 @@
 /* VERIFYX shared profile logic.
-   Frontend demonstration only: localStorage is NOT secure storage.
-   Never store passwords or real biometric data here. */
+   Identity fields come from the authenticated server session; optional profile
+   edits/preferences stay in localStorage. Never store passwords or biometrics here. */
 (function () {
   'use strict';
 
@@ -35,36 +35,29 @@
     return h;
   }
 
-  /* Build a default demo profile from the sign-in session (if any). */
+  /* Build the profile from the authenticated server session (if any). */
   function buildDefaultUser(session) {
-    var loginId = session && session.id ? String(session.id) : 'guest';
-    var firstName = 'Demo';
-    var lastName = 'Student';
-    var email = 'demo.student@example.edu';
-    if (loginId.indexOf('@') > -1) {
-      var local = loginId.split('@')[0];
-      var parts = local.split(/[._-]+/).filter(Boolean);
-      if (parts.length) { firstName = titleCase(parts[0]); }
-      if (parts.length > 1) { lastName = titleCase(parts[parts.length - 1]); }
-      email = loginId;
-    }
-    var isEmployee = /^emp/i.test(loginId);
-    if (isEmployee) { lastName = 'Employee'; }
+    var loginId = session && (session.student_id || session.id) ? String(session.student_id || session.id) : 'guest';
+    var parts = String((session && session.name) || '').trim().split(/\s+/).filter(Boolean);
+    var firstName = parts.length ? titleCase(parts[0]) : 'Demo';
+    var lastName = parts.length > 1 ? titleCase(parts[parts.length - 1]) : '';
+    var isEmployee = /^emp/i.test(loginId) || (session && session.account_type === 'University Personnel');
+    if (!lastName && isEmployee) { lastName = 'Personnel'; }
     return {
       loginId: loginId,
       firstName: firstName,
       middleName: '',
       lastName: lastName,
-      studentId: loginId.indexOf('@') > -1 ? '' : loginId,
-      email: email,
+      studentId: session && session.student_id ? String(session.student_id) : (loginId.indexOf('@') > -1 ? '' : loginId),
+      email: session && session.email ? String(session.email) : (loginId.indexOf('@') > -1 ? loginId : ''),
       contact: '',
-      college: '',
-      program: '',
+      college: session && session.department ? String(session.department) : '',
+      program: session && session.program ? String(session.program) : '',
       yearLevel: '',
-      accountType: isEmployee ? 'Employee' : 'Student',
-      role: session && session.role ? session.role : 'user',
-      userId: 'VX-' + String(100000 + (hashNumber(loginId) % 900000)),
-      accountStatus: 'Active',
+      accountType: session && session.account_type ? String(session.account_type) : (isEmployee ? 'Employee' : 'Student'),
+      role: session && session.role ? String(session.role) : 'user',
+      userId: session && session.user_id ? String(session.user_id) : 'VX-' + String(100000 + (hashNumber(loginId) % 900000)),
+      accountStatus: session && session.verified === false ? 'Pending Verification' : 'Active',
       registeredAt: new Date().toISOString(),
       photo: null
     };
@@ -83,16 +76,26 @@
     var session = readSession();
     var stored = null;
     try { stored = safeParse(localStorage.getItem(USER_KEY)); } catch (e) { stored = null; }
-    var sessionId = session && session.id ? String(session.id) : null;
+    var sessionId = session && (session.student_id || session.id) ? String(session.student_id || session.id) : null;
+    var fresh = buildDefaultUser(session);
     var valid = stored && typeof stored === 'object' && typeof stored.firstName === 'string';
-    /* A different sign-in identity starts a fresh demo profile. */
-    if (!valid || (sessionId && stored.loginId && stored.loginId !== sessionId)) {
-      var fresh = buildDefaultUser(session);
-      writeUser(fresh);
-      return fresh;
+    var differentUser = !!sessionId && !!stored && !!stored.loginId && stored.loginId !== sessionId;
+    /* A different sign-in identity starts a fresh profile. */
+    var merged = (!valid || differentUser) ? fresh : Object.assign({}, fresh, stored);
+    if (session) {
+      /* Server-owned fields always win over locally saved values. */
+      var serverFields = {
+        email: session.email,
+        studentId: session.student_id,
+        userId: session.user_id,
+        role: session.role,
+        accountStatus: session.verified === false ? 'Pending Verification' : 'Active'
+      };
+      Object.keys(serverFields).forEach(function (k) {
+        if (serverFields[k]) { merged[k] = serverFields[k]; }
+      });
     }
-    var merged = buildDefaultUser(session);
-    Object.keys(stored).forEach(function (k) { merged[k] = stored[k]; });
+    if (!valid || differentUser) { writeUser(merged); }
     return merged;
   }
 
@@ -274,6 +277,7 @@
     renderAvatar: renderAvatar,
     updateAvatars: updateAvatars,
     updateTopNav: updateTopNav,
+    refreshAll: refreshAll,
     getPrefs: getPrefs,
     savePrefs: savePrefs,
     validateProfile: validateProfile,

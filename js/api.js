@@ -9,7 +9,7 @@
     var url = BASE + path;
     var res;
     try {
-      res = await fetch(url, Object.assign({ headers: { 'Accept': 'application/json' } }, options));
+      res = await fetch(url, Object.assign({ credentials: 'same-origin', headers: { 'Accept': 'application/json' } }, options));
     } catch (e) {
       var err = new Error('Cannot reach VERIFYX backend. Start it with: .\\.venv\\Scripts\\python.exe backend\\app.py (from project root), then open http://127.0.0.1:5000/');
       err.cause = e;
@@ -72,6 +72,13 @@
     captureFrame: captureFrame,
     getProfileMeta: getProfileMeta,
     health: function () { return get('/api/health'); },
+    me: function () { return get('/api/auth/me'); },
+    signin: function (identity, password, role) { return post('/api/auth/signin', { identity: identity, password: password, role: role || 'user' }); },
+    signup: function (profile) { return post('/api/auth/signup', profile); },
+    verifyOtp: function (email, code) { return post('/api/auth/verify-otp', { email: email, code: code }); },
+    resendOtp: function (email) { return post('/api/auth/resend-otp', { email: email }); },
+    signout: function () { return post('/api/auth/signout', {}); },
+    changePassword: function (currentPassword, newPassword) { return post('/api/auth/change-password', { current_password: currentPassword, new_password: newPassword }); },
     modelInfo: function () { return get('/api/model/info'); },
     recognize: function (image, extra) { return post('/api/recognize', Object.assign({ image: image }, extra || {})); },
     // Dynamic enrollment: requires name; person_id optional (re-enroll/add samples)

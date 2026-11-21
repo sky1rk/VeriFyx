@@ -27,7 +27,7 @@
   <main class="app-main">
     <header class="app-top">
       <div class="crumb">VERIFYX <span class="muted">/ EXAMINATION VERIFICATION</span></div>
-      <div class="user-chip"><span class="status ok">LBPH Backend</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
+      <div class="user-chip"><span class="status ok">VGG Model</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
     </header>
 
     <div class="app-content">
@@ -35,12 +35,12 @@
         <div>
           <div class="eyebrow">EXAMINATION / IDENTITY CHECK</div>
           <h1>Examination Verification.</h1>
-          <p>Confirm examinee identity using the LBPH recognition backend. Captured frames are matched against the trained model and attempts are recorded.</p>
+          <p>Confirm examinee identity using the VGG recognition backend. Captured frames are matched against the trained model and attempts are recorded.</p>
         </div>
       </div>
 
       <div class="notice">
-        Verification uses the local LBPH recognizer trained on <b>enrolled faces</b>. The recognized enrolled name is logged for this examination attempt. Enroll people first on the Face Enrollment page.
+        Verification uses the local VGG recognizer trained on <b>enrolled faces</b>. The recognized enrolled name is logged for this examination attempt. Enroll people first on the Face Enrollment page.
       </div>
 
       <div class="content-grid">
@@ -56,7 +56,7 @@
               </div>
               <video id="cameraVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;display:block"></video>
             </div>
-            <p class="muted">Align your face in the frame and keep still, then click Verify Identity to run LBPH matching through the backend.</p>
+            <p class="muted">Align your face in the frame and keep still, then click Verify Identity to run VGG matching through the backend.</p>
             <div class="controls">
               <button class="btn btn-ghost" id="startCamera">Start Camera</button>
               <button class="btn btn-primary" id="startVerify">Verify Identity</button>
@@ -78,7 +78,7 @@
           <div class="panel-head" style="margin-top:16px"><h3>Verification Result</h3></div>
           <div class="result" id="verificationResult">
             <h4>EXAMINATION VERIFICATION</h4>
-            <p>No verification result yet. Start the camera and click "Verify Identity" to run LBPH recognition.</p>
+            <p>No verification result yet. Start the camera and click "Verify Identity" to run VGG recognition.</p>
           </div>
         </aside>
       </div>

@@ -27,7 +27,7 @@
   <main class="app-main">
     <header class="app-top">
       <div class="crumb">VERIFYX <span class="muted">/ WORKSPACE</span></div>
-      <div class="user-chip"><span class="status ok">LBPH Backend</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
+      <div class="user-chip"><span class="status ok">VGG Model</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
     </header>
 
     <div class="app-content">
@@ -35,7 +35,7 @@
         <div>
           <div class="eyebrow">USER WORKSPACE</div>
           <h1>Overview.</h1>
-          <p>Monitor enrolled identities, recognition activity, and attendance records from the LBPH backend.</p>
+          <p>Monitor enrolled identities, recognition activity, and attendance records from the VGG backend.</p>
         </div>
       </div>
 
@@ -45,6 +45,17 @@
         <div class="stat-card"><div class="label">VERIFIED</div><div class="value" id="statVerified" data-stat="verified">0</div><div class="sub"><span class="status ok">Accepted matches</span></div></div>
         <div class="stat-card"><div class="label">REJECTED / NO FACE</div><div class="value"><span id="statRejected">0</span> / <span id="statNoFace">0</span></div><div class="sub"><span class="status bad">Unmatched attempts</span></div></div>
       </div>
+
+      <section class="panel hidden" id="adminRequestCard" style="margin-bottom:18px">
+        <div class="panel-head"><h3>Administrator Access Request</h3><span class="status warn" id="adminRequestStatus">PENDING</span></div>
+        <p class="muted" id="adminRequestMessage" style="font-size:12px">University Personnel can request administrator access after their university email is verified.</p>
+        <div class="field hidden" id="adminRequestPasscodeField"><label>Access passcode</label><input id="adminRequestPasscode" type="password" autocomplete="off" placeholder="Enter the passcode configured by your administrator"></div>
+        <div class="controls" style="flex-wrap:wrap;gap:10px">
+          <button class="btn btn-primary btn-small" id="requestAdminBtn" type="button">Request Admin Access</button>
+          <button class="btn btn-ghost btn-small" id="refreshAdminRequestBtn" type="button">Refresh status</button>
+        </div>
+        <div class="form-error" id="adminRequestError" style="margin-top:10px"></div>
+      </section>
 
       <div class="content-grid">
         <section class="panel">
@@ -56,14 +67,14 @@
             <a class="btn btn-ghost" href="attendance-history.html">View History</a>
           </div>
           <div class="notice" style="margin-top:14px">
-            <b>How it works:</b> Enroll a person by name on the Face Enrollment page (capture one or more samples). The backend trains a local LBPH recognizer from enrolled samples. Attendance and examination verification recognize enrolled identities and log results.
+            <b>How it works:</b> Enroll a person by name on the Face Enrollment page (capture one or more samples). The backend trains a local VGG recognizer from enrolled samples. Attendance and examination verification recognize enrolled identities and log results.
           </div>
         </section>
 
         <aside class="panel">
           <div class="panel-head"><h3>System Status</h3></div>
           <table class="info-table">
-            <tr><td><b>Recognition</b></td><td>Local LBPH (dynamic enrollment)</td></tr>
+            <tr><td><b>Recognition</b></td><td>Local VGG (dynamic enrollment)</td></tr>
             <tr><td><b>Face Detection</b></td><td>Haar Cascade + preprocessing</td></tr>
             <tr><td><b>Input Size</b></td><td>62 × 47 grayscale</td></tr>
             <tr><td><b>Records</b></td><td>Stored in backend/data/attendance.json</td></tr>

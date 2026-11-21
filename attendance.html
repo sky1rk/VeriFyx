@@ -27,7 +27,7 @@
   <main class="app-main">
     <header class="app-top">
       <div class="crumb">VERIFYX <span class="muted">/ ATTENDANCE</span></div>
-      <div class="user-chip"><span class="status ok">LBPH Backend</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
+      <div class="user-chip"><span class="status ok">VGG Model</span><div class="avatar" data-user-avatar>VX</div><div><b id="displayName">Demo User</b><div class="muted" style="font-size:9px" id="displayId">Account ID</div></div></div>
     </header>
 
     <div class="app-content">
@@ -35,12 +35,12 @@
         <div>
           <div class="eyebrow">ATTENDANCE / FACE SCAN</div>
           <h1>Record Attendance.</h1>
-          <p>Capture a frame and verify identity with the LBPH backend. Each attempt is processed by the trained model and recorded.</p>
+          <p>Capture a frame and verify identity with the VGG backend. Each attempt is processed by the trained model and recorded.</p>
         </div>
       </div>
 
       <div class="notice">
-        Verification uses the local LBPH recognizer trained on <b>enrolled faces</b>. The recognized name is logged to attendance history. Lower distance means a closer match; results are accepted only when within the threshold. Enroll people first on the Face Enrollment page.
+        Verification uses the local VGG recognizer trained on <b>enrolled faces</b>. The recognized name is logged to attendance history. Lower distance means a closer match; results are accepted only when within the threshold. Enroll people first on the Face Enrollment page.
       </div>
 
       <div class="content-grid">
@@ -56,7 +56,7 @@
               </div>
               <video id="cameraVideo" autoplay playsinline muted style="width:100%;height:100%;object-fit:cover;display:block"></video>
             </div>
-            <p class="muted">Make sure your face is visible in the frame, then click Record Attendance to capture and verify with the LBPH backend.</p>
+            <p class="muted">Make sure your face is visible in the frame, then click Record Attendance to capture and verify with the VGG backend.</p>
             <div class="controls">
               <button class="btn btn-ghost" id="startCamera">Start Camera</button>
               <button class="btn btn-primary" id="recordAttendance">Record Attendance</button>
@@ -80,7 +80,7 @@
           <div class="panel-head" style="margin-top:16px"><h3>Verification Result</h3></div>
           <div class="result" id="verificationResult">
             <h4>ATTENDANCE STATUS</h4>
-            <p>No attendance verification has been performed. Start the camera and click "Record Attendance" to run LBPH recognition.</p>
+            <p>No attendance verification has been performed. Start the camera and click "Record Attendance" to run VGG recognition.</p>
           </div>
         </aside>
       </div>

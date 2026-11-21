@@ -4,12 +4,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   $('#startVerify')?.addEventListener('click', () => runExamVerification());
   $('#recordAttendance')?.addEventListener('click', () => runAttendance());
-  $('#startEnroll')?.addEventListener('click', async () => { await startCamera('camera'); toast('Camera opened. Enter a name and capture to enroll.'); });
+  $('#startEnroll')?.addEventListener('click', async () => { await startCamera('camera'); toast('Camera opened. Capture a face sample to enroll.'); });
   $('#captureFace')?.addEventListener('click', () => runEnrollment());
 
+  applyEnrollmentIdentity();
   refreshEnrollmentUI();
   checkBackend();
 });
+
+function applyEnrollmentIdentity() {
+  const session = typeof currentUser === 'function' ? currentUser() : null;
+  if (!session || session.role !== 'user') return;
+  const nameInput = document.getElementById('enrollName');
+  const idInput = document.getElementById('enrollPersonId');
+  if (nameInput) { nameInput.value = session.name || ''; nameInput.readOnly = true; }
+  if (idInput) { idInput.value = session.user_id || session.student_id || ''; idInput.readOnly = true; }
+  const note = document.getElementById('enrollmentIdentityNote');
+  if (note) note.textContent = 'Your name and account ID are taken from your verified account. You can only enroll your own face.';
+}
 
 async function checkBackend() {
   if (!window.VXAPI) return;

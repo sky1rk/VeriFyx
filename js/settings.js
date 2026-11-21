@@ -60,7 +60,7 @@
     if (text) { $(id).setAttribute('aria-invalid', 'true'); } else { $(id).removeAttribute('aria-invalid'); }
   }
 
-  function onPassword(e) {
+  async function onPassword(e) {
     e.preventDefault();
     var cur = $('currentPassword').value;
     var nw = $('newPassword').value;
@@ -74,9 +74,20 @@
     if (!cf) { setErr('confirmPassword', 'Confirm your new password.'); bad = bad || 'confirmPassword'; }
     else if (nw && cf !== nw) { setErr('confirmPassword', 'Passwords do not match.'); bad = bad || 'confirmPassword'; }
     if (bad) { $(bad).focus(); return; }
-    /* Demo only: nothing is stored or transmitted. */
-    $('passwordForm').reset();
-    toast('Password change accepted (demo). No password was stored or sent.');
+
+    var button = $('passwordForm').querySelector('[type="submit"]');
+    if (button) { button.disabled = true; button.textContent = 'Updating…'; }
+    try {
+      if (!window.VXAPI) throw new Error('The VERIFYX backend is unavailable.');
+      await window.VXAPI.changePassword(cur, nw);
+      $('passwordForm').reset();
+      toast('Password changed. Please sign in again.');
+      setTimeout(function () { if (typeof logout === 'function') logout(); }, 800);
+    } catch (err) {
+      setErr('currentPassword', err.message || 'Could not change the password.');
+      toast(err.message || 'Could not change the password.');
+      if (button) { button.disabled = false; button.textContent = 'Save Password Changes'; }
+    }
   }
 
   function showSaved(ok) {
