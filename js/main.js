@@ -21,6 +21,68 @@ function toast(msg) {
 function openModal(id) { const el = document.getElementById(id); if (el) el.classList.add('open'); }
 function closeModal(id) { const el = document.getElementById(id); if (el) el.classList.remove('open'); }
 
+function handleVerificationRedirect() {
+  var params;
+  try { params = new URLSearchParams(location.search); } catch (e) { return; }
+  if (params.get('verified') !== '1') return;
+  var message = 'Email successfully verified. You may now log in';
+  try {
+    var stored = sessionStorage.getItem('verifyxToast');
+    if (stored) { message = stored; sessionStorage.removeItem('verifyxToast'); }
+  } catch (e) {}
+  toast(message);
+  params.delete('verified');
+  var query = params.toString();
+  try { history.replaceState(null, '', location.pathname + (query ? '?' + query : '') + location.hash); } catch (e) {}
+}
+
+function initScrollSpy() {
+  var nav = document.getElementById('navLinks');
+  if (!nav) return;
+
+  var items = [];
+  $$('a', nav).forEach(function (link) {
+    var href = link.getAttribute('href') || '';
+    var section = null;
+    if (href.charAt(0) === '#' && href.length > 1) section = document.getElementById(href.slice(1));
+    else if (href.indexOf('index.html') === 0 || href === '') section = document.querySelector('.hero') || document.querySelector('main');
+    if (section) items.push({ link: link, section: section });
+  });
+  if (!items.length) return;
+
+  var hovered = null;
+
+  function setActive(item) {
+    items.forEach(function (entry) { entry.link.classList.toggle('active', entry === item); });
+  }
+
+  function scrollActive() {
+    var header = document.querySelector('.topnav');
+    var marker = window.scrollY + (header ? header.offsetHeight : 76) + Math.round(window.innerHeight * 0.25);
+    var active = items[0];
+    items.forEach(function (entry) {
+      if (entry.section.getBoundingClientRect().top + window.scrollY <= marker) active = entry;
+    });
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+      active = items[items.length - 1];
+    }
+    return active;
+  }
+
+  function refresh() { setActive(hovered || scrollActive()); }
+
+  items.forEach(function (entry) {
+    entry.section.addEventListener('mouseenter', function () { hovered = entry; setActive(entry); });
+    entry.section.addEventListener('mouseleave', function () {
+      if (hovered === entry) { hovered = null; refresh(); }
+    });
+  });
+
+  window.addEventListener('scroll', function () { hovered = null; refresh(); }, { passive: true });
+  window.addEventListener('resize', refresh);
+  refresh();
+}
+
 function wireCommon() {
   $$('.modal-backdrop').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
   $$('[data-modal]').forEach(b => b.addEventListener('click', () => openModal(b.dataset.modal)));
@@ -234,6 +296,8 @@ async function initAuthGuard() {
 
 document.addEventListener('DOMContentLoaded', () => {
   wireCommon();
+  handleVerificationRedirect();
+  initScrollSpy();
   initAuthGuard();
 });
 
