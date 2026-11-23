@@ -241,15 +241,15 @@
       var button = otpForm.querySelector('[type="submit"]');
       setBusy(button, true, 'Verifying…');
       try {
-        var data = await post('/api/auth/verify-otp', { email: pendingEmail, code: code });
-        var approval = data.admin_request_email || {};
-        var approvalMessage = '';
-        if (approval.sent) approvalMessage = ' Your admin access request was sent to the administrator for approval.';
-        else if (approval.error) approvalMessage = ' ' + approval.error;
-        setText('otpStatus', 'Email verified' + (data.already_verified ? ' already.' : ' successfully.') + ' You can now sign in.' + approvalMessage);
+        await post('/api/auth/verify-otp', { email: pendingEmail, code: code });
+        setText('otpStatus', 'Email verified successfully. Redirecting to sign in…');
         var done = el('otpDone');
         if (done) done.classList.remove('hidden');
-        toast(approval.sent ? 'Email verified; admin request sent.' : 'Email verified.');
+        toast('Email successfully verified. You may now log in', {
+          progress: true,
+          duration: 3000,
+          onDone: function () { location.href = 'signin.html'; }
+        });
       } catch (err) {
         setText('otpError', err.message);
       } finally {

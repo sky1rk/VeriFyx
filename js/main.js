@@ -9,17 +9,98 @@ const ADMIN_ONLY_PAGES = new Set(['admin-dashboard.html', 'attendance.html', 'ex
 const USER_ONLY_PAGES = new Set(['user-dashboard.html']);
 const ADMIN_ONLY_LINKS = ['admin-dashboard.html', 'attendance.html', 'examination-verification.html'];
 
-function toast(msg) {
+function toast(msg, options) {
+  options = options || {};
   let t = $('#toast');
-  if (!t) { t = document.createElement('div'); t.id = 'toast'; t.className = 'toast'; document.body.append(t); }
-  t.textContent = msg;
-  t.classList.add('show');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'toast';
+    t.className = 'toast';
+    document.body.append(t);
+  }
+  if (!t.querySelector('.toast-msg')) {
+    t.innerHTML = '<span class="toast-msg"></span><span class="toast-progress"><i></i></span>';
+  }
+  const msgNode = t.querySelector('.toast-msg');
+  if (msgNode) msgNode.textContent = msg; else t.textContent = msg;
+  const bar = t.querySelector('.toast-progress');
+  const fill = bar ? bar.querySelector('i') : null;
+
   clearTimeout(window.__toastTimer);
-  window.__toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+  t.classList.add('show');
+  if (bar && fill) {
+    bar.classList.remove('show');
+    fill.style.transition = 'none';
+    fill.style.width = '0%';
+  }
+
+  if (options.progress && bar && fill) {
+    const duration = Number(options.duration) > 0 ? Number(options.duration) : 3000;
+    bar.classList.add('show');
+    void fill.offsetWidth;
+    fill.style.transition = 'width ' + duration + 'ms linear';
+    fill.style.width = '100%';
+    window.__toastTimer = setTimeout(function () {
+      t.classList.remove('show');
+      bar.classList.remove('show');
+      fill.style.transition = 'none';
+      fill.style.width = '0%';
+      if (typeof options.onDone === 'function') options.onDone();
+    }, duration);
+  } else {
+    window.__toastTimer = setTimeout(() => t.classList.remove('show'), 3200);
+  }
 }
 
 function openModal(id) { const el = document.getElementById(id); if (el) el.classList.add('open'); }
 function closeModal(id) { const el = document.getElementById(id); if (el) el.classList.remove('open'); }
+
+function initScrollSpy() {
+  var nav = document.getElementById('navLinks');
+  if (!nav) return;
+
+  var items = [];
+  $$('a', nav).forEach(function (link) {
+    var href = link.getAttribute('href') || '';
+    var section = null;
+    if (href.charAt(0) === '#' && href.length > 1) section = document.getElementById(href.slice(1));
+    else if (href.indexOf('index.html') === 0 || href === '') section = document.querySelector('.hero') || document.querySelector('main');
+    if (section) items.push({ link: link, section: section });
+  });
+  if (!items.length) return;
+
+  var hovered = null;
+
+  function setActive(item) {
+    items.forEach(function (entry) { entry.link.classList.toggle('active', entry === item); });
+  }
+
+  function scrollActive() {
+    var header = document.querySelector('.topnav');
+    var marker = window.scrollY + (header ? header.offsetHeight : 76) + Math.round(window.innerHeight * 0.25);
+    var active = items[0];
+    items.forEach(function (entry) {
+      if (entry.section.getBoundingClientRect().top + window.scrollY <= marker) active = entry;
+    });
+    if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4) {
+      active = items[items.length - 1];
+    }
+    return active;
+  }
+
+  function refresh() { setActive(hovered || scrollActive()); }
+
+  items.forEach(function (entry) {
+    entry.section.addEventListener('mouseenter', function () { hovered = entry; setActive(entry); });
+    entry.section.addEventListener('mouseleave', function () {
+      if (hovered === entry) { hovered = null; refresh(); }
+    });
+  });
+
+  window.addEventListener('scroll', function () { hovered = null; refresh(); }, { passive: true });
+  window.addEventListener('resize', refresh);
+  refresh();
+}
 
 function wireCommon() {
   $$('.modal-backdrop').forEach(m => m.addEventListener('click', e => { if (e.target === m) m.classList.remove('open'); }));
@@ -234,6 +315,7 @@ async function initAuthGuard() {
 
 document.addEventListener('DOMContentLoaded', () => {
   wireCommon();
+  initScrollSpy();
   initAuthGuard();
 });
 
