@@ -245,8 +245,11 @@
         setText('otpStatus', 'Email verified successfully. Redirecting to sign in…');
         var done = el('otpDone');
         if (done) done.classList.remove('hidden');
-        try { sessionStorage.setItem('verifyxToast', 'Email successfully verified. You may now log in'); } catch (e) {}
-        location.href = 'signin.html?verified=1';
+        toast('Email successfully verified. You may now log in', {
+          progress: true,
+          duration: 3000,
+          onDone: function () { location.href = 'signin.html'; }
+        });
       } catch (err) {
         setText('otpError', err.message);
       } finally {

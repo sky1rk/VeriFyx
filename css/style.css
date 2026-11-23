@@ -79,3 +79,9 @@ th .sort-btn:hover{color:var(--lime)}
 /* Sticky topbar + section scroll spy */
 section[id]{scroll-margin-top:92px}
 .navlinks a{transition:color .2s ease}
+/* Toast progress bar */
+.toast{overflow:hidden}
+.toast-msg{display:block}
+.toast-progress{display:none;position:absolute;left:0;right:0;bottom:0;height:3px;background:#ffffff1f}
+.toast-progress.show{display:block}
+.toast-progress i{display:block;height:100%;width:0;background:var(--lime);border-radius:0 2px 2px 0}
